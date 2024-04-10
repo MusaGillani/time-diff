@@ -4,14 +4,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Form } from "./ui/form";
-import { useRef } from "react";
-import { useEventListener } from "usehooks-ts";
 import { Button } from "./ui/button";
 import { Label } from "./ui/label";
 import { Separator } from "./ui/separator";
 import { CardStack, defaultBreakObj } from "./ui/card-stack";
 import { TimeInput } from "./TimeInput";
-import { useEffect } from "react";
 import { useCtrlCmdEnter } from "@/hooks/useCtrlCmdEnter";
 
 const time = z.object({
