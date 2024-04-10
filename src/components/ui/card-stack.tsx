@@ -55,7 +55,7 @@ export const CardStack = ({ control }: CardStackProps) => {
   };
 
   return (
-    <div className="relative w-full">
+    <div className="relative w-full h-96">
       {breakFields.fields.map((_, index) => {
         const key = "break." + index;
         return (
