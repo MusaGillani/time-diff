@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef } from "react";
+import React from "react";
 import { motion } from "framer-motion";
 import { Button } from "./button";
 import {
@@ -44,13 +44,6 @@ export const CardStack = ({ control }: CardStackProps) => {
     control,
     name: "afkBreak",
   });
-
-  const cards = useRef([
-    {
-      id: "break.0",
-      ...defaultBreakObj,
-    },
-  ]);
 
   const onNext = (index: number) => {
     breakFields.append(defaultBreakObj);
