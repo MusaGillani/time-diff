@@ -3,12 +3,16 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Form, FormControl, FormField, FormItem, FormMessage } from "./ui/form";
-import { Input } from "./ui/input";
+import { Form } from "./ui/form";
+import { useRef } from "react";
+import { useEventListener } from "usehooks-ts";
 import { Button } from "./ui/button";
 import { Label } from "./ui/label";
 import { Separator } from "./ui/separator";
 import { CardStack, defaultBreakObj } from "./ui/card-stack";
+import { TimeInput } from "./TimeInput";
+import { useEffect } from "react";
+import { useCtrlCmdEnter } from "@/hooks/useCtrlCmdEnter";
 
 const time = z.object({
   hour: z.coerce.number().gte(0, "non zero").max(24),
@@ -42,7 +46,11 @@ function TimeForm() {
     },
   });
 
-  function onSubmit(data: FormSchema) {}
+  function onSubmit(data: FormSchema) {
+    console.log("data :>> ", data);
+  }
+
+  useCtrlCmdEnter(form.handleSubmit(onSubmit));
 
   return (
     <div>
@@ -51,65 +59,29 @@ function TimeForm() {
           onSubmit={form.handleSubmit(onSubmit)}
           className="flex flex-col gap-y-8 w-2/5 mx-auto my-5"
         >
-          <Label className="text-2xl">Here</Label>
-          <div className="flex gap-x-5 ">
-            <FormField
-              control={form.control}
-              name="here.hour"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input {...field} placeholder="hour" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="here.minute"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input {...field} placeholder="minutes" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
+          <TimeInput
+            label="Here"
+            nameHour="here.hour"
+            nameMinute="here.minute"
+          />
           <Separator />
           <Label className="text-2xl">Breaks</Label>
           <CardStack control={form.control} />
           <Separator />
-          <Label className="text-2xl">Leaving</Label>
-          <div className="flex gap-x-5 ">
-            <FormField
-              control={form.control}
-              name={`leaving.hour`}
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input {...field} placeholder="hour" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name={`leaving.minute`}
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input {...field} placeholder="minutes" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
+          <TimeInput
+            label="Leaving"
+            nameHour="leaving.hour"
+            nameMinute="leaving.minute"
+          />
+
           <Button type="submit">Submit</Button>
+          <Label className="text-center text-muted-foreground">
+            tip{" "}
+            <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100">
+              <span className="text-xs">⌘</span>Enter
+            </kbd>{" "}
+            to submit
+          </Label>
         </form>
       </Form>
     </div>

@@ -19,6 +19,7 @@ import {
 } from "./form";
 import { Input } from "./input";
 import { triggerByKeyGenerate } from "@/lib/form";
+import { TimeInput } from "../TimeInput";
 
 export interface CardStackProps {
   control: UseFormReturn<FormSchema>["control"];
@@ -66,72 +67,18 @@ export const CardStack = ({ control }: CardStackProps) => {
             key={key}
           >
             <div className="flex flex-col gap-y-3 border-2 border-slate-300 rounded-lg p-5 ">
-              <Label className="text-xl">Away</Label>
-              <div className="flex gap-x-5 ">
-                <FormField
-                  control={control}
-                  name={`afkBreak.${index}.away.hour`}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Hour</FormLabel>
-                      <FormControl>
-                        <Input {...field} placeholder="hour" />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={control}
-                  name={`afkBreak.${index}.away.minute`}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Minutes</FormLabel>
-                      <FormControl>
-                        <Input
-                          {...field}
-                          placeholder="minutes"
-                          className="grow"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <Label className="text-xl">Back</Label>
-              <div className="flex gap-x-5 ">
-                <FormField
-                  control={control}
-                  name={`afkBreak.${index}.back.hour`}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Hour</FormLabel>
-                      <FormControl>
-                        <Input {...field} placeholder="hour" />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={control}
-                  name={`afkBreak.${index}.back.minute`}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Minutes</FormLabel>
-                      <FormControl>
-                        <Input
-                          {...field}
-                          placeholder="minutes"
-                          className="grow"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
+              <TimeInput
+                label="Away"
+                timeLabels
+                nameHour={`afkBreak.${index}.away.hour`}
+                nameMinute={`afkBreak.${index}.away.minute`}
+              />
+              <TimeInput
+                label="Away"
+                timeLabels
+                nameHour={`afkBreak.${index}.back.hour`}
+                nameMinute={`afkBreak.${index}.back.minute`}
+              />
             </div>
             <div className="flex gap-x-3 my-1">
               <Button
