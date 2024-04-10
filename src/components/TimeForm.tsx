@@ -49,7 +49,7 @@ function TimeForm() {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="space-y-8 w-2/5 mx-auto gap-y-4 my-5"
+          className="flex flex-col gap-y-8 w-2/5 mx-auto my-5"
         >
           <Label className="text-2xl">Here</Label>
           <div className="flex gap-x-5 ">
@@ -81,8 +81,7 @@ function TimeForm() {
           <Separator />
           <Label className="text-2xl">Breaks</Label>
           <CardStack control={form.control} />
-          <Separator />
-          <Label className="text-2xl !mt-2">Leaving</Label>
+          <Label className="text-2xl">Leaving</Label>
           <div className="flex gap-x-5 ">
             <FormField
               control={form.control}
