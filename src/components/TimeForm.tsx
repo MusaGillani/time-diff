@@ -81,6 +81,7 @@ function TimeForm() {
           <Separator />
           <Label className="text-2xl">Breaks</Label>
           <CardStack control={form.control} />
+          <Separator />
           <Label className="text-2xl">Leaving</Label>
           <div className="flex gap-x-5 ">
             <FormField
