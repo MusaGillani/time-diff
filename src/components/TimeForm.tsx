@@ -7,7 +7,7 @@ import { Form } from "./ui/form";
 import { Button } from "./ui/button";
 import { Label } from "./ui/label";
 import { Separator } from "./ui/separator";
-import { CardStack, defaultBreakObj } from "./ui/card-stack";
+import { CardStack, defaultBreakObj } from "./card-stack";
 import { TimeInput } from "./TimeInput";
 import { useCtrlCmdEnter } from "@/hooks/useCtrlCmdEnter";
 
