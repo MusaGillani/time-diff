@@ -10,8 +10,13 @@ import {
 } from "react-hook-form";
 import { FormSchema } from "../TimeForm";
 import { Label } from "./label";
-import { FormControl, FormField, FormItem, FormMessage } from "./form";
-import { Separator } from "@radix-ui/react-separator";
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "./form";
 import { Input } from "./input";
 import { triggerByKeyGenerate } from "@/lib/form";
 
@@ -21,12 +26,12 @@ export interface CardStackProps {
 
 export const defaultBreakObj = {
   away: {
-    hour: -1,
-    minute: -1,
+    hour: 0,
+    minute: 0,
   },
   back: {
-    hour: -1,
-    minute: -1,
+    hour: 0,
+    minute: 0,
   },
 };
 
@@ -47,24 +52,27 @@ export const CardStack = ({ control }: CardStackProps) => {
     },
   ]);
 
-  const flipNext = () => {
-    const newArray = [...breakFields.fields!]; // create a copy of the array
-    newArray.unshift(newArray.pop()!); // move the last element to the front
-    cards.current = newArray;
+  const onNext = (index: number) => {
+    breakFields.append(defaultBreakObj);
+    triggerByKey(`afkBreak[${index}]`);
+  };
+
+  const removeCard = (index: number) => {
+    breakFields.remove(index);
   };
 
   return (
-    <div className="relative h-96 w-full">
-      {cards.current.map((_, index) => {
+    <div className="relative h030rem] w-full">
+      {breakFields.fields.map((_, index) => {
         const key = "break." + index;
         return (
           <Card
             id={key}
             index={index}
-            totalCards={cards.current.length}
+            totalCards={breakFields.fields.length}
             key={key}
           >
-            <div className="border-2 border-slate-300 rounded-lg p-5 ">
+            <div className="flex flex-col gap-y-3 border-2 border-slate-300 rounded-lg p-5 ">
               <Label className="text-xl">Away</Label>
               <div className="flex gap-x-5 ">
                 <FormField
@@ -72,6 +80,7 @@ export const CardStack = ({ control }: CardStackProps) => {
                   name={`afkBreak.${index}.away.hour`}
                   render={({ field }) => (
                     <FormItem>
+                      <FormLabel>Hour</FormLabel>
                       <FormControl>
                         <Input {...field} placeholder="hour" />
                       </FormControl>
@@ -84,6 +93,7 @@ export const CardStack = ({ control }: CardStackProps) => {
                   name={`afkBreak.${index}.away.minute`}
                   render={({ field }) => (
                     <FormItem>
+                      <FormLabel>Minutes</FormLabel>
                       <FormControl>
                         <Input
                           {...field}
@@ -96,7 +106,6 @@ export const CardStack = ({ control }: CardStackProps) => {
                   )}
                 />
               </div>
-              <Separator />
               <Label className="text-xl">Back</Label>
               <div className="flex gap-x-5 ">
                 <FormField
@@ -104,6 +113,7 @@ export const CardStack = ({ control }: CardStackProps) => {
                   name={`afkBreak.${index}.back.hour`}
                   render={({ field }) => (
                     <FormItem>
+                      <FormLabel>Hour</FormLabel>
                       <FormControl>
                         <Input {...field} placeholder="hour" />
                       </FormControl>
@@ -116,6 +126,7 @@ export const CardStack = ({ control }: CardStackProps) => {
                   name={`afkBreak.${index}.back.minute`}
                   render={({ field }) => (
                     <FormItem>
+                      <FormLabel>Minutes</FormLabel>
                       <FormControl>
                         <Input
                           {...field}
@@ -129,22 +140,18 @@ export const CardStack = ({ control }: CardStackProps) => {
                 />
               </div>
             </div>
-            <div className="flex gap-x-3">
+            <div className="flex gap-x-3 my-1">
               <Button
                 type="button"
                 className="grow"
-                onClick={() => {
-                  breakFields.append(defaultBreakObj);
-                  triggerByKey(`afkBreak[${index}]`);
-                  flipNext();
-                }}
+                onClick={() => onNext(index)}
               >
                 Next
               </Button>
               {index > 0 && (
                 <Button
                   className="grow"
-                  onClick={() => breakFields.remove(index)}
+                  onClick={() => removeCard(index)}
                   type="button"
                 >
                   Remove
@@ -174,18 +181,20 @@ export const Card = ({
   children,
 }: CardProps) => {
   const CARD_OFFSET = offset || 10;
-  const SCALE_FACTOR = scaleFactor || 0.06;
+  // * Scale is 1 for index + 1 === totalCards
+  // * Scale decreases by scaleFactor (by default 0.06) when index decreases by 1
+  // * in other words the scale will be - 0.06 for each decrease in index by 1
+  const scaleCalculated = calcScale(index + 1, totalCards, scaleFactor);
   return (
     <motion.div
       key={id}
-      className="absolute dark:bg-black bg-white h-80 w-full rounded-3xl p-4 shadow-xl border border-neutral-200 dark:border-white/[0.1]  shadow-black/[0.1] dark:shadow-white/[0.05] flex flex-col justify-between"
+      className="absolute dark:bg-black bg-white h-96 w-full rounded-3xl p-4 shadow-xl border border-neutral-200 dark:border-white/[0.1]  shadow-black/[0.1] dark:shadow-white/[0.05] flex flex-col justify-between"
       style={{
         transformOrigin: "top center",
       }}
       animate={{
         top: index * CARD_OFFSET,
-        // FIXME: fix animation scale for cards
-        scale: 1 - (index / totalCards) * SCALE_FACTOR,
+        scale: scaleCalculated,
         zIndex: totalCards + index, //  decrease z-index for the cards that are behind
       }}
     >
@@ -193,3 +202,14 @@ export const Card = ({
     </motion.div>
   );
 };
+
+/// inverse of 1 - index * SCALE_FACTOR
+function calcScale(point: number, x: number, scaleFactor?: number) {
+  // using y = mx + b
+  // m is SLOPE
+  // b is Intercept
+
+  const SLOPE = scaleFactor || 0.06;
+  const Intercept = 1 - SLOPE * x;
+  return SLOPE * point + Intercept;
+}
