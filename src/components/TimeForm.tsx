@@ -59,7 +59,7 @@ function TimeForm() {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input {...field} placeholder="here" />
+                    <Input {...field} placeholder="hour" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -71,7 +71,7 @@ function TimeForm() {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input {...field} placeholder="here" />
+                    <Input {...field} placeholder="minutes" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -89,7 +89,7 @@ function TimeForm() {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input {...field} placeholder="here" />
+                    <Input {...field} placeholder="hour" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -101,7 +101,7 @@ function TimeForm() {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input {...field} placeholder="here" />
+                    <Input {...field} placeholder="minutes" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
