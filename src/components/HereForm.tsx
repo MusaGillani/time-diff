@@ -32,10 +32,10 @@ function HereForm() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col gap-y-8 w-full my-5"
+        className="my-5 flex w-full flex-col gap-y-8"
       >
         <Card id={"Here"} index={0} totalCards={breakFields + 2} key={"Here"}>
-          <div className="flex flex-col gap-y-3 border-2 border-slate-300 rounded-lg p-5 justify-between h-full">
+          <div className="flex h-full flex-col justify-between gap-y-3 rounded-lg border-2 border-slate-300 p-5">
             <TimeInput
               label="Here"
               nameHour="here.hour"

@@ -15,7 +15,8 @@
     "lint": "next lint",
     "add-comp": "bunx shadcn-ui@latest add",
     "cm": "cz",
-    "prepare": "husky"
+    "prepare": "husky && husky install",
+    "format": "bunx prettier . --write"
   },
   "dependencies": {
     "@formkit/tempo": "^0.0.19",
@@ -47,8 +48,12 @@
     "cz-conventional-changelog": "^3.3.0",
     "eslint": "^8",
     "eslint-config-next": "14.1.4",
+    "eslint-config-prettier": "^9.1.0",
     "husky": "^9.0.11",
+    "lint-staged": "^15.2.2",
     "postcss": "^8",
+    "prettier": "^3.2.5",
+    "prettier-plugin-tailwindcss": "^0.5.13",
     "tailwindcss": "^3.3.0",
     "typescript": "^5"
   },
@@ -57,9 +62,9 @@
       "path": "./node_modules/cz-conventional-changelog"
     }
   },
-  "husky": {
-    "hooks": {
-      "prepare-commit-msg": "exec < /dev/tty && bunx cz --hook || true"
-    }
+  "lint-staged": {
+    "**/*": "prettier --write --ignore-unknown",
+    "*.js": "eslint --cache --fix",
+    "*.{js,css,md}": "prettier --write"
   }
 }

@@ -17,7 +17,7 @@ export const breakFormSchema = z.object({
           away: timeSchema,
           back: timeSchema,
         })
-        .optional()
+        .optional(),
     )
     .min(1),
 });
@@ -69,7 +69,7 @@ function BreakForm() {
               totalCards={breakFields.fields.length + 1}
               key={key}
             >
-              <div className="flex flex-col gap-y-3 border-2 border-slate-300 rounded-lg p-5 ">
+              <div className="flex flex-col gap-y-3 rounded-lg border-2 border-slate-300 p-5 ">
                 <TimeInput
                   label="Away"
                   timeLabels
@@ -83,7 +83,7 @@ function BreakForm() {
                   nameMinute={`afkBreak.${index}.back.minute`}
                 />
               </div>
-              <div className="flex gap-x-3 my-4">
+              <div className="my-4 flex gap-x-3">
                 <Button
                   type="button"
                   className="grow"

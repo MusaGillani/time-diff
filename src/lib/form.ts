@@ -11,7 +11,7 @@ const getAllNamesByKey = (values: any, key: any) => {
   const unpackKeys = (
     obj: { [x: string]: any; hasOwnProperty: (arg0: string) => any },
     stack: string,
-    toReturn: any[]
+    toReturn: any[],
   ) => {
     // Check which parser we will use
     const parser = Array.isArray(obj) ? parseArray : parseObj;
