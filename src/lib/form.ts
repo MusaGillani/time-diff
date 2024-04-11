@@ -1,3 +1,5 @@
+import { z } from "zod";
+
 /// TL;DR cannot trigger by a key of a field, only by field name
 /// hack to get around, GH issue referenced
 /// https://github.com/react-hook-form/react-hook-form/issues/2379
@@ -38,3 +40,8 @@ export const triggerByKeyGenerate =
     const namesToTrigger = getAllNamesByKey(values, key);
     namesToTrigger.map((name) => trigger(name));
   };
+
+export const timeSchema = z.object({
+  hour: z.coerce.number().gte(0, "non zero").max(24),
+  minute: z.coerce.number().gte(0, "non zero").max(59),
+});

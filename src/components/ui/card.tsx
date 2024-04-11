@@ -25,7 +25,7 @@ export const Card = ({
   return (
     <motion.div
       key={id}
-      className="absolute dark:bg-black bg-white h-96 w-full rounded-3xl p-4 shadow-xl border border-neutral-200 dark:border-white/[0.1]  shadow-black/[0.1] dark:shadow-white/[0.05] flex flex-col justify-between"
+      className="absolute dark:bg-black bg-white h-96 w-full rounded-3xl p-4 shadow-xl border border-neutral-200 dark:border-white/[0.1]  shadow-black/[0.1] dark:shadow-white/[0.05]"
       style={{
         transformOrigin: "top center",
       }}
