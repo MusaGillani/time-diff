@@ -1,139 +1,84 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useFieldArray, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Form, FormControl, FormField, FormItem, FormMessage } from "./ui/form";
-import { Input } from "./ui/input";
+import { Form } from "./ui/form";
 import { Button } from "./ui/button";
-import { PlusIcon } from "lucide-react";
 import { Label } from "./ui/label";
-import { format } from "@formkit/tempo";
+import { Separator } from "./ui/separator";
+import { CardStack, defaultBreakObj } from "./card-stack";
+import { TimeInput } from "./TimeInput";
+import { useCtrlCmdEnter } from "@/hooks/useCtrlCmdEnter";
 
-const schema = z.object({
-  here: z.date(),
-  away: z.array(z.object({ time: z.date().optional() })).min(1),
-  back: z.array(z.object({ time: z.date().optional() })).min(1),
-  leaving: z.date(),
+const time = z.object({
+  hour: z.coerce.number().gte(0, "non zero").max(24),
+  minute: z.coerce.number().gte(0, "non zero").max(59),
 });
 
-type FormSchema = z.infer<typeof schema>;
+const afkBreak = z
+  .array(
+    z
+      .object({
+        away: time,
+        back: time,
+      })
+      .optional()
+  )
+  .min(1);
+
+const schema = z.object({
+  here: time,
+  afkBreak,
+  leaving: time,
+});
+
+export type FormSchema = z.infer<typeof schema>;
 
 function TimeForm() {
   const form = useForm<FormSchema>({
     resolver: zodResolver(schema),
     defaultValues: {
-      away: [{}], // to show atleast one input field
-      back: [{}],
+      afkBreak: [defaultBreakObj],
     },
   });
 
-  const awayFields = useFieldArray({
-    control: form.control,
-    name: "away",
-  });
-  const backFields = useFieldArray({
-    control: form.control,
-    name: "back",
-  });
-
-  function onSubmit(data: FormSchema) {}
-
-  function formatTime(value: string | undefined) {
-    if (!!value) return format(value, { time: "medium" });
+  function onSubmit(data: FormSchema) {
+    console.log("data :>> ", data);
   }
+
+  useCtrlCmdEnter(form.handleSubmit(onSubmit));
+
   return (
     <div>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="space-y-8 w-2/5 mx-auto gap-y-4 my-2"
+          className="flex flex-col gap-y-8 w-2/5 mx-auto my-5"
         >
-          <Label className="text-2xl">Here</Label>
-          <FormField
-            control={form.control}
-            name="here"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <Input
-                    {...field}
-                    placeholder="here"
-                    value={formatTime(field.value?.toISOString())}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
+          <TimeInput
+            label="Here"
+            nameHour="here.hour"
+            nameMinute="here.minute"
           />
-          <div className="flex items-center gap-x-10">
-            <Label className="text-2xl">Back</Label>
-            <Button type="button" onClick={() => backFields.append({})}>
-              <PlusIcon />
-            </Button>
-          </div>
-          {backFields.fields.map((field, index) => (
-            <FormField
-              key={field.id}
-              control={form.control}
-              name={`back.${index}.time`}
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      placeholder="back"
-                      value={formatTime(field.value?.toISOString())}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          ))}
-          <div className="flex items-center gap-x-10">
-            <Label className="text-2xl">Away</Label>
-            <Button type="button" onClick={() => awayFields.append({})}>
-              <PlusIcon />
-            </Button>
-          </div>
-          {awayFields.fields.map((field, index) => (
-            <FormField
-              key={field.id}
-              control={form.control}
-              name={`away.${index}.time`}
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      placeholder="away"
-                      value={formatTime(field.value?.toISOString())}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          ))}
-          <Label className="text-2xl">Leaving</Label>
-          <FormField
-            control={form.control}
-            name="leaving"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <Input
-                    {...field}
-                    placeholder="leaving"
-                    value={formatTime(field.value?.toISOString())}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
+          <Separator />
+          <Label className="text-2xl">Breaks</Label>
+          <CardStack control={form.control} />
+          <Separator />
+          <TimeInput
+            label="Leaving"
+            nameHour="leaving.hour"
+            nameMinute="leaving.minute"
           />
+
           <Button type="submit">Submit</Button>
+          <Label className="text-center text-muted-foreground">
+            tip{" "}
+            <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100">
+              <span className="text-xs">⌘</span>Enter
+            </kbd>{" "}
+            to submit
+          </Label>
         </form>
       </Form>
     </div>
