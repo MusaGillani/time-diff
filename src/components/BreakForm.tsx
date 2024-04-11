@@ -57,8 +57,6 @@ function BreakForm() {
     breakFields.remove(index);
   };
 
-  console.log("breakFields.fields.length :>> ", breakFields.fields.length);
-
   return (
     <Form {...form}>
       <form>
