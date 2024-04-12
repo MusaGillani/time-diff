@@ -7,9 +7,10 @@ import { Form } from "./ui/form";
 import { Card } from "./ui/card";
 import TimeInput from "./TimeInput";
 import { Button } from "./ui/button";
-import { Separator } from "./ui/separator";
 import { timeSchema } from "@/lib/form";
 import { z } from "zod";
+import { useStateStore } from "@/state/provider";
+import { FormTypes } from "@/state/store";
 
 export const leavingFormSchema = z.object({
   leaving: timeSchema,
@@ -18,16 +19,24 @@ export const leavingFormSchema = z.object({
 export type LeavingFormSchema = z.infer<typeof leavingFormSchema>;
 
 function LeavingForm() {
+  const { leaving, saveLeaving, totalCards, formName } = useStateStore(
+    (store) => ({
+      leaving: store.leaving,
+      saveLeaving: store.saveLeaving,
+      totalCards: store.breaks.length + 2,
+      formName: store.form,
+    }),
+  );
+
   const form = useForm<LeavingFormSchema>({
     resolver: zodResolver(leavingFormSchema),
+    defaultValues: { leaving },
   });
 
   function onSubmit(data: LeavingFormSchema) {
-    throw new Error("implement leavingForm onSubmit");
+    saveLeaving(data);
   }
 
-  // TODO: get from state machine
-  const breakFields = -1;
   return (
     <Form {...form}>
       <form
@@ -36,8 +45,8 @@ function LeavingForm() {
       >
         <Card
           id={"Leaving"}
-          index={breakFields + 2}
-          totalCards={breakFields + 2}
+          index={totalCards}
+          totalCards={totalCards}
           key={"Leaving"}
         >
           <div className="flex h-full flex-col justify-between gap-y-3 rounded-lg border-2 border-slate-300 p-5">
@@ -49,11 +58,12 @@ function LeavingForm() {
             <Button type="submit">Next</Button>
           </div>
         </Card>
-        <Separator />
-        <EnterShortcut
-          shortCut={form.handleSubmit(onSubmit)}
-          text={"to go next"}
-        />
+        {formName === FormTypes.LEAVING && (
+          <EnterShortcut
+            shortCut={form.handleSubmit(onSubmit)}
+            text={"to submit"}
+          />
+        )}
       </form>
     </Form>
   );

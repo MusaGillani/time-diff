@@ -45,3 +45,14 @@ export const timeSchema = z.object({
   hour: z.coerce.number().gte(0, "non zero").max(24),
   minute: z.coerce.number().gte(0, "non zero").max(59),
 });
+
+export const defaultBreakObj = {
+  away: {
+    hour: 0,
+    minute: 0,
+  },
+  back: {
+    hour: 0,
+    minute: 0,
+  },
+};

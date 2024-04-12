@@ -1,6 +1,6 @@
 "use client";
 
-import { timeSchema, triggerByKeyGenerate } from "@/lib/form";
+import { defaultBreakObj, timeSchema, triggerByKeyGenerate } from "@/lib/form";
 import TimeInput from "./TimeInput";
 import { Button } from "./ui/button";
 import { Card } from "./ui/card";
@@ -8,9 +8,12 @@ import { useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "./ui/form";
+import { useStateStore } from "@/state/provider";
+import EnterShortcut from "./EnterShortcut";
+import { FormTypes } from "@/state/store";
 
 export const breakFormSchema = z.object({
-  afkBreak: z
+  breaks: z
     .array(
       z
         .object({
@@ -24,63 +27,61 @@ export const breakFormSchema = z.object({
 
 export type BreakFormSchema = z.infer<typeof breakFormSchema>;
 
-export const defaultBreakObj = {
-  away: {
-    hour: 0,
-    minute: 0,
-  },
-  back: {
-    hour: 0,
-    minute: 0,
-  },
-};
-
 function BreakForm() {
+  const { breaks, saveBreaks, totalCards, formName } = useStateStore(
+    (store) => ({
+      breaks: store.breaks,
+      saveBreaks: store.saveBreaks,
+      totalCards: store.breaks.length + 2,
+      formName: store.form,
+    }),
+  );
+
   const form = useForm<BreakFormSchema>({
     resolver: zodResolver(breakFormSchema),
-    defaultValues: {
-      afkBreak: [defaultBreakObj],
+    defaultValues: () => {
+      return Promise.resolve({ breaks });
     },
   });
+
   const triggerByKey = triggerByKeyGenerate(form.getValues, form.trigger);
   const breakFields = useFieldArray({
     control: form.control,
-    name: "afkBreak",
+    name: "breaks",
   });
 
   const onNext = (index: number) => {
     breakFields.append(defaultBreakObj);
-    triggerByKey(`afkBreak[${index}]`);
+    triggerByKey(`breaks[${index}]`);
   };
 
   const removeCard = (index: number) => {
     breakFields.remove(index);
   };
 
+  function onSubmit(data: BreakFormSchema) {
+    saveBreaks(data);
+  }
+
   return (
     <Form {...form}>
-      <form>
+      <form onSubmit={form.handleSubmit(onSubmit)}>
         {breakFields.fields.map((_, index) => {
-          const key = "break." + index;
+          const key = "breaks." + index;
           return (
-            <Card
-              id={key}
-              index={index + 1}
-              totalCards={breakFields.fields.length + 1}
-              key={key}
-            >
+            <Card id={key} index={index + 1} totalCards={totalCards} key={key}>
               <div className="flex flex-col gap-y-3 rounded-lg border-2 border-slate-300 p-5 ">
                 <TimeInput
                   label="Away"
                   timeLabels
-                  nameHour={`afkBreak.${index}.away.hour`}
-                  nameMinute={`afkBreak.${index}.away.minute`}
+                  nameHour={`breaks.${index}.away.hour`}
+                  nameMinute={`breaks.${index}.away.minute`}
                 />
                 <TimeInput
-                  label="Away"
+                  label="Back"
                   timeLabels
-                  nameHour={`afkBreak.${index}.back.hour`}
-                  nameMinute={`afkBreak.${index}.back.minute`}
+                  nameHour={`breaks.${index}.back.hour`}
+                  nameMinute={`breaks.${index}.back.minute`}
                 />
               </div>
               <div className="my-4 flex gap-x-3">
@@ -89,7 +90,7 @@ function BreakForm() {
                   className="grow"
                   onClick={() => onNext(index)}
                 >
-                  Next
+                  Add another
                 </Button>
                 {index + 1 > 1 && (
                   <Button
@@ -100,10 +101,19 @@ function BreakForm() {
                     Remove
                   </Button>
                 )}
-              </div>
+              </div>{" "}
+              <Button type="submit" className="w-full">
+                Next
+              </Button>
             </Card>
           );
         })}
+        {formName === FormTypes.BREAKS && (
+          <EnterShortcut
+            shortCut={form.handleSubmit(onSubmit)}
+            text={"to add leaving"}
+          />
+        )}
       </form>
     </Form>
   );
