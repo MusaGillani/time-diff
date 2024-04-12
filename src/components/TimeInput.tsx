@@ -8,25 +8,30 @@ import {
   FormLabel,
 } from "./ui/form";
 import { FieldPath, useFormContext } from "react-hook-form";
-import { FormSchema } from "./TimeForm";
+import { HereFormSchema } from "./HereForm";
+import { LeavingFormSchema } from "./LeavingForm";
+import { BreakFormSchema } from "./BreakForm";
+import dynamic from "next/dynamic";
+
+type Schema = HereFormSchema | LeavingFormSchema | BreakFormSchema;
 
 export interface TimeInputProps {
-  nameMinute: FieldPath<FormSchema>;
-  nameHour: FieldPath<FormSchema>;
+  nameMinute: FieldPath<Schema>;
+  nameHour: FieldPath<Schema>;
   label: string;
   timeLabels?: boolean;
 }
 
-export function TimeInput({
+function TimeInput({
   nameHour,
   nameMinute,
   label,
   timeLabels,
 }: TimeInputProps) {
-  const { control } = useFormContext<FormSchema>();
+  const { control } = useFormContext<Schema>();
 
   return (
-    <>
+    <div>
       <Label className="text-2xl">{label}</Label>
       <div className="flex gap-x-5 ">
         <FormField
@@ -58,6 +63,12 @@ export function TimeInput({
           )}
         />
       </div>
-    </>
+    </div>
   );
 }
+
+export default TimeInput;
+
+export const TimeInputNoSSR = dynamic(() => Promise.resolve(TimeInput), {
+  ssr: false,
+});

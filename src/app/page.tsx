@@ -1,9 +1,9 @@
-import TimeForm from "@/components/TimeForm";
+import FormStack from "./FormStack";
 
 export default function Home() {
   return (
-    <main className="w-screen h-screen">
-      <TimeForm />
+    <main className="h-screen w-screen">
+      <FormStack />
     </main>
   );
 }
