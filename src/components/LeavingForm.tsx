@@ -10,7 +10,7 @@ import { Button } from "./ui/button";
 import { timeSchema } from "@/lib/form";
 import { z } from "zod";
 import { useStateStore } from "@/state/provider";
-import { FormTypes } from "@/state/store";
+import { Steps } from "@/state/store";
 
 export const leavingFormSchema = z.object({
   leaving: timeSchema,
@@ -19,14 +19,12 @@ export const leavingFormSchema = z.object({
 export type LeavingFormSchema = z.infer<typeof leavingFormSchema>;
 
 function LeavingForm() {
-  const { leaving, saveLeaving, totalCards, formName } = useStateStore(
-    (store) => ({
-      leaving: store.leaving,
-      saveLeaving: store.saveLeaving,
-      totalCards: store.breaks.length + 2,
-      formName: store.form,
-    }),
-  );
+  const { leaving, saveLeaving, totalCards, step } = useStateStore((store) => ({
+    leaving: store.leaving,
+    saveLeaving: store.saveLeaving,
+    totalCards: store.breaks.length + 2,
+    step: store.step,
+  }));
 
   const form = useForm<LeavingFormSchema>({
     resolver: zodResolver(leavingFormSchema),
@@ -58,7 +56,7 @@ function LeavingForm() {
             <Button type="submit">Next</Button>
           </div>
         </Card>
-        {formName === FormTypes.LEAVING && (
+        {step === Steps.LEAVING && (
           <EnterShortcut
             shortCut={form.handleSubmit(onSubmit)}
             text={"to submit"}

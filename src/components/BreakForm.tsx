@@ -10,7 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "./ui/form";
 import { useStateStore } from "@/state/provider";
 import EnterShortcut from "./EnterShortcut";
-import { FormTypes } from "@/state/store";
+import { Steps } from "@/state/store";
 
 export const breakFormSchema = z.object({
   breaks: z
@@ -28,14 +28,12 @@ export const breakFormSchema = z.object({
 export type BreakFormSchema = z.infer<typeof breakFormSchema>;
 
 function BreakForm() {
-  const { breaks, saveBreaks, totalCards, formName } = useStateStore(
-    (store) => ({
-      breaks: store.breaks,
-      saveBreaks: store.saveBreaks,
-      totalCards: store.breaks.length + 2,
-      formName: store.form,
-    }),
-  );
+  const { breaks, saveBreaks, totalCards, step } = useStateStore((store) => ({
+    breaks: store.breaks,
+    saveBreaks: store.saveBreaks,
+    totalCards: store.breaks.length + 2,
+    step: store.step,
+  }));
 
   const form = useForm<BreakFormSchema>({
     resolver: zodResolver(breakFormSchema),
@@ -108,7 +106,7 @@ function BreakForm() {
             </Card>
           );
         })}
-        {formName === FormTypes.BREAKS && (
+        {step === Steps.BREAKS && (
           <EnterShortcut
             shortCut={form.handleSubmit(onSubmit)}
             text={"to add leaving"}
