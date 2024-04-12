@@ -8,7 +8,7 @@ import { FormTypes } from "@/state/store";
 function FormStack() {
   const form = useStateStore((store) => store.form);
   return (
-    <div className="relative m-auto my-5 h-fit max-h-114 w-2/5">
+    <div className="md:3/5 sm:full relative m-auto my-5 h-fit max-h-114 lg:w-2/5">
       <HereForm />
       {(() => {
         if (form === FormTypes.BREAKS || form === FormTypes.LEAVING) {

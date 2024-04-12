@@ -14,7 +14,7 @@ function ShortCut({ shortcutDesc, shortcutKey, className }: ShortCutProps) {
   return (
     <Label
       className={cn(
-        "fixed bottom-5 left-1/2 -translate-x-1/2 transform text-center text-muted-foreground",
+        "fixed bottom-5 left-1/2 hidden -translate-x-1/2 transform text-center text-muted-foreground lg:block",
         className,
       )}
     >
