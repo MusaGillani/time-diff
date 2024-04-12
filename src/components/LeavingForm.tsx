@@ -12,6 +12,8 @@ import { z } from "zod";
 import { useStateStore } from "@/state/provider";
 import { Steps } from "@/state/store";
 
+// TODO: add validation to check time is after last added back entry in breaks
+// use isAfter helper form tempo
 export const leavingFormSchema = z.object({
   leaving: timeSchema,
 });
@@ -22,7 +24,7 @@ function LeavingForm() {
   const { leaving, saveLeaving, totalCards, step } = useStateStore((store) => ({
     leaving: store.leaving,
     saveLeaving: store.saveLeaving,
-    totalCards: store.breaks.length + 2,
+    totalCards: store.breaks.length + 3,
     step: store.step,
   }));
 
@@ -43,7 +45,7 @@ function LeavingForm() {
       >
         <Card
           id={"Leaving"}
-          index={totalCards}
+          index={totalCards - 1}
           totalCards={totalCards}
           key={"Leaving"}
         >

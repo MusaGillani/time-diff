@@ -22,7 +22,7 @@ function HereForm() {
   const { here, saveHere, totalCards, step } = useStateStore((store) => ({
     here: store.here,
     saveHere: store.saveHere,
-    totalCards: store.breaks.length + 2,
+    totalCards: store.breaks.length + 3,
     step: store.step,
   }));
 

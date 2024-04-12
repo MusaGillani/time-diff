@@ -9,6 +9,7 @@ export enum Steps {
   HERE,
   BREAKS,
   LEAVING,
+  RESULT,
 }
 
 export type State = HereFormSchema &
@@ -50,6 +51,7 @@ export const createStateStore = (initState: State = defaultInitState) => {
       saveLeaving: (data) =>
         set((state) => {
           state.leaving = data.leaving;
+          state.step = Steps.RESULT;
         }),
     })),
   );

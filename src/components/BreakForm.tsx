@@ -12,6 +12,8 @@ import { useStateStore } from "@/state/provider";
 import EnterShortcut from "./EnterShortcut";
 import { Steps } from "@/state/store";
 
+// TODO: add validation to check time is after Here entry
+// use isAfter helper form tempo
 export const breakFormSchema = z.object({
   breaks: z
     .array(
@@ -31,7 +33,7 @@ function BreakForm() {
   const { breaks, saveBreaks, totalCards, step } = useStateStore((store) => ({
     breaks: store.breaks,
     saveBreaks: store.saveBreaks,
-    totalCards: store.breaks.length + 2,
+    totalCards: store.breaks.length + 3,
     step: store.step,
   }));
 
