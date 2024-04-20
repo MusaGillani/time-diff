@@ -10,7 +10,7 @@ import { Button } from "./ui/button";
 import { z } from "zod";
 import { timeSchema } from "@/lib/form";
 import { useStateStore } from "@/state/provider";
-import { FormTypes } from "@/state/store";
+import { Steps } from "@/state/store";
 
 export const hereFormSchema = z.object({
   here: timeSchema,
@@ -19,11 +19,11 @@ export const hereFormSchema = z.object({
 export type HereFormSchema = z.infer<typeof hereFormSchema>;
 
 function HereForm() {
-  const { here, saveHere, totalCards, formName } = useStateStore((store) => ({
+  const { here, saveHere, totalCards, step } = useStateStore((store) => ({
     here: store.here,
     saveHere: store.saveHere,
-    totalCards: store.breaks.length + 2,
-    formName: store.form,
+    totalCards: store.breaks.length + 3,
+    step: store.step,
   }));
 
   const form = useForm<HereFormSchema>({
@@ -51,7 +51,7 @@ function HereForm() {
             <Button type="submit">Next</Button>
           </div>
         </Card>
-        {formName === FormTypes.HERE && (
+        {step === Steps.HERE && (
           <EnterShortcut
             shortCut={form.handleSubmit(onSubmit)}
             text={"to add breaks"}

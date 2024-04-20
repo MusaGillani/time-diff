@@ -1,0 +1,2 @@
+export const HOUR_IN_MILLISECONDS = 3_600_000;
+export const MINUTE_IN_MILLISECONDS = 6_000;

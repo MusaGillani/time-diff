@@ -10,8 +10,10 @@ import { Button } from "./ui/button";
 import { timeSchema } from "@/lib/form";
 import { z } from "zod";
 import { useStateStore } from "@/state/provider";
-import { FormTypes } from "@/state/store";
+import { Steps } from "@/state/store";
 
+// TODO: add validation to check time is after last added back entry in breaks
+// use isAfter helper form tempo
 export const leavingFormSchema = z.object({
   leaving: timeSchema,
 });
@@ -19,14 +21,12 @@ export const leavingFormSchema = z.object({
 export type LeavingFormSchema = z.infer<typeof leavingFormSchema>;
 
 function LeavingForm() {
-  const { leaving, saveLeaving, totalCards, formName } = useStateStore(
-    (store) => ({
-      leaving: store.leaving,
-      saveLeaving: store.saveLeaving,
-      totalCards: store.breaks.length + 2,
-      formName: store.form,
-    }),
-  );
+  const { leaving, saveLeaving, totalCards, step } = useStateStore((store) => ({
+    leaving: store.leaving,
+    saveLeaving: store.saveLeaving,
+    totalCards: store.breaks.length + 3,
+    step: store.step,
+  }));
 
   const form = useForm<LeavingFormSchema>({
     resolver: zodResolver(leavingFormSchema),
@@ -45,7 +45,7 @@ function LeavingForm() {
       >
         <Card
           id={"Leaving"}
-          index={totalCards}
+          index={totalCards - 1}
           totalCards={totalCards}
           key={"Leaving"}
         >
@@ -58,7 +58,7 @@ function LeavingForm() {
             <Button type="submit">Next</Button>
           </div>
         </Card>
-        {formName === FormTypes.LEAVING && (
+        {step === Steps.LEAVING && (
           <EnterShortcut
             shortCut={form.handleSubmit(onSubmit)}
             text={"to submit"}
