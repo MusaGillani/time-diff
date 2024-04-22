@@ -41,10 +41,15 @@ export const triggerByKeyGenerate =
     namesToTrigger.map((name) => trigger(name));
   };
 
+const nonEmptyString = (obj: z.ZodTypeAny) =>
+  z.number().or(z.string().trim().min(1)).pipe(obj);
+
 export const timeSchema = z.object({
-  hour: z.coerce.number().gte(0, "non zero").max(24),
-  minute: z.coerce.number().gte(0, "non zero").max(59),
+  hour: nonEmptyString(z.coerce.number().gte(0, "non zero").max(24)),
+  minute: nonEmptyString(z.coerce.number().gte(0, "non zero").max(59)),
 });
+
+export type TimeSchema = z.infer<typeof timeSchema>;
 
 export const defaultBreakObj = {
   away: {
