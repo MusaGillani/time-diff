@@ -13,18 +13,16 @@ export function Stack() {
   const ref = useRef<HTMLButtonElement | null>(null);
   return (
     <div className="relative m-auto my-5 h-fit max-h-114 sm:w-11/12 md:w-3/5 lg:w-2/5">
-      {shifts.length === 0 && (
-        <div className="my-5 flex w-full flex-col gap-y-8">
-          <Card id={Steps.HERE} index={0} totalCards={1} key={Steps.HERE}>
-            <Time type={Steps.HERE} ref={ref} />
-          </Card>
-        </div>
-      )}
+      <div className="my-5 flex w-full flex-col gap-y-8">
+        <Card id={Steps.HERE} index={0} totalCards={1} key={Steps.HERE}>
+          <Time type={Steps.HERE} ref={ref} />
+        </Card>
+      </div>
       {shifts.at(-1)?.step === Steps.LEAVING ? (
         <Card
           id={"result"}
-          index={shifts.length - 1}
-          totalCards={shifts.length}
+          index={shifts.length}
+          totalCards={shifts.length + 1}
           key={"result"}
         >
           <Result />
@@ -37,8 +35,8 @@ export function Stack() {
             <div className="my-5 flex w-full flex-col gap-y-8" key={index}>
               <Card
                 id={Steps[type]}
-                index={index}
-                totalCards={shifts.length}
+                index={index + 1}
+                totalCards={shifts.length + 1}
                 key={Steps[type]}
               >
                 <Time type={type} ref={ref} />
