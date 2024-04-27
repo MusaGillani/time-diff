@@ -19,7 +19,7 @@
     "format": "bunx prettier . --write"
   },
   "dependencies": {
-    "@formkit/tempo": "^0.0.19",
+    "@formkit/tempo": "^0.1.1",
     "@hookform/resolvers": "^3.3.4",
     "@radix-ui/react-dialog": "^1.0.5",
     "@radix-ui/react-label": "^2.0.2",
@@ -32,11 +32,14 @@
     "framer-motion": "^11.0.25",
     "immer": "^10.0.4",
     "lucide-react": "^0.364.0",
+    "mitt": "^3.0.1",
     "next": "14.1.4",
+    "next-themes": "^0.3.0",
     "react": "^18",
     "react-dom": "^18",
     "react-hook-form": "^7.51.2",
     "recharts": "^2.12.5",
+    "sonner": "^1.4.41",
     "tailwind-merge": "^2.2.2",
     "tailwindcss-animate": "^1.0.7",
     "usehooks-ts": "^3.1.0",

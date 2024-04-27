@@ -1,9 +1,9 @@
-import FormStack from "./FormStack";
+import { Stack } from "./Stack";
 
 export default function Home() {
   return (
     <main className="h-screen w-screen">
-      <FormStack />
+      <Stack />
     </main>
   );
 }
