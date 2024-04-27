@@ -7,17 +7,26 @@ import { useStateStore } from "@/state/provider";
 import { Steps } from "@/state/store";
 import Result from "@/components/Result";
 import { useRef } from "react";
+import { SubmitRef } from "@/components/Time";
 
+const STACK_ID = "stack-comp";
 export function Stack() {
   const shifts = useStateStore((state) => state.shifts);
-  const ref = useRef<HTMLButtonElement | null>(null);
+  const ref = useRef<SubmitRef | null>(null);
+
   return (
-    <div className="relative m-auto my-5 h-fit max-h-114 sm:w-11/12 md:w-3/5 lg:w-2/5">
-      <div className="my-5 flex w-full flex-col gap-y-8">
-        <Card id={Steps.HERE} index={0} totalCards={1} key={Steps.HERE}>
-          <Time type={Steps.HERE} ref={ref} />
-        </Card>
-      </div>
+    <div
+      className="relative m-auto my-5 h-fit max-h-114 sm:w-11/12 md:w-3/5 lg:w-2/5"
+      id={STACK_ID}
+    >
+      <Card
+        id={Steps.HERE}
+        index={0}
+        totalCards={shifts.length + 1}
+        key={Steps.HERE}
+      >
+        <Time type={Steps.HERE} ref={ref} />
+      </Card>
       {shifts.at(-1)?.step === Steps.LEAVING ? (
         <Card
           id={"result"}
@@ -28,11 +37,10 @@ export function Stack() {
           <Result />
         </Card>
       ) : (
-        shifts.map(({ step }, index) => {
-          // FIXME: get `leaving` boolean
-          const type = getStepType(step, true);
+        shifts.map(({ step, leaving }, index) => {
+          const type = getStepType(step, leaving);
           return (
-            <div className="my-5 flex w-full flex-col gap-y-8" key={index}>
+            <>
               <Card
                 id={Steps[type]}
                 index={index + 1}
@@ -41,17 +49,18 @@ export function Stack() {
               >
                 <Time type={type} ref={ref} />
               </Card>
-            </div>
+              {type === Steps.BACK && (
+                <EnterShortcut
+                  text={"to submit entries"}
+                  shortCut={() => {
+                    // FIXME: this ref is null
+                    ref.current!();
+                  }}
+                />
+              )}
+            </>
           );
         })
-      )}
-      {shifts.at(-1)?.step !== Steps.LEAVING && (
-        <EnterShortcut
-          text={"to submit entries"}
-          shortCut={() => {
-            ref.current?.click();
-          }}
-        />
       )}
     </div>
   );

@@ -23,20 +23,22 @@ export const Card = ({
   // * in other words the scale will be - 0.06 for each decrease in index by 1
   const scaleCalculated = calcScale(index + 1, totalCards, scaleFactor);
   return (
-    <motion.div
-      key={id}
-      className="absolute h-100 w-full rounded-3xl border border-neutral-200 bg-white p-4 shadow-xl shadow-black/[0.1] dark:border-white/[0.1]  dark:bg-black dark:shadow-white/[0.05]"
-      style={{
-        transformOrigin: "top center",
-      }}
-      animate={{
-        top: index * CARD_OFFSET,
-        scale: scaleCalculated,
-        zIndex: totalCards + index, //  decrease z-index for the cards that are behind
-      }}
-    >
-      {children}
-    </motion.div>
+    <div className="my-5 flex w-full flex-col gap-y-8" key={index}>
+      <motion.div
+        key={id}
+        className="absolute h-100 w-full rounded-3xl border border-neutral-200 bg-white p-4 shadow-xl shadow-black/[0.1] dark:border-white/[0.1]  dark:bg-black dark:shadow-white/[0.05]"
+        style={{
+          transformOrigin: "top center",
+        }}
+        animate={{
+          top: index * CARD_OFFSET,
+          scale: scaleCalculated,
+          zIndex: totalCards + index, //  decrease z-index for the cards that are behind
+        }}
+      >
+        {children}
+      </motion.div>
+    </div>
   );
 };
 

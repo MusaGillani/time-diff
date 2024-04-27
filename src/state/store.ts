@@ -12,6 +12,7 @@ export enum Steps {
 export type State = {
   shifts: {
     step: Steps;
+    leaving?: boolean;
     time: TimeSchema;
   }[];
 };
