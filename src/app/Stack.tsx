@@ -27,7 +27,7 @@ export function Stack() {
       >
         <Time type={Steps.HERE} ref={ref} />
       </Card>
-      {shifts.at(-1)?.step === Steps.LEAVING ? (
+      {shifts.at(-1)?.step === Steps.LEAVING && (
         <Card
           id={"result"}
           index={shifts.length}
@@ -36,32 +36,32 @@ export function Stack() {
         >
           <Result />
         </Card>
-      ) : (
-        shifts.map(({ step, leaving }, index) => {
-          const type = getStepType(step, leaving);
-          return (
-            <>
-              <Card
-                id={Steps[type]}
-                index={index + 1}
-                totalCards={shifts.length + 1}
-                key={Steps[type]}
-              >
-                <Time type={type} ref={ref} />
-              </Card>
-              {type === Steps.BACK && (
-                // FIXME: this keeps rendering in other steps after its visible
-                <EnterShortcut
-                  text={"to submit entries"}
-                  shortCut={() => {
-                    ref.current!(true);
-                  }}
-                />
-              )}
-            </>
-          );
-        })
       )}
+      {shifts.map(({ step, leaving }, index) => {
+        const type = getStepType(step, leaving);
+        if (type === Steps.HERE) return;
+        return (
+          <>
+            <Card
+              id={Steps[type]}
+              index={index + 1}
+              totalCards={shifts.length + 1}
+              key={Steps[type]}
+            >
+              <Time type={type} ref={ref} />
+            </Card>
+            {type === Steps.BACK && (
+              // FIXME: this keeps rendering in other steps after its visible
+              <EnterShortcut
+                text={"to submit entries"}
+                shortCut={() => {
+                  ref.current!(true);
+                }}
+              />
+            )}
+          </>
+        );
+      })}
     </div>
   );
 }
