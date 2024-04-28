@@ -1,10 +1,8 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
 import { StoreProvider } from "@/state/provider";
 import { Toaster } from "sonner";
-
-const inter = Inter({ subsets: ["latin"] });
+import { orbitron } from "@/font";
 
 export const metadata: Metadata = {
   title: "Time Diff",
@@ -18,7 +16,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={orbitron.className}>
         <StoreProvider>{children}</StoreProvider>
         <Toaster richColors />
       </body>
