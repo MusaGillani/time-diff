@@ -42,7 +42,7 @@ export const triggerByKeyGenerate =
   };
 
 const nonEmptyString = (obj: z.ZodTypeAny) =>
-  z.number().or(z.string().trim().min(1)).pipe(obj);
+  z.number().or(z.string().trim().min(1, "Must be non empty")).pipe(obj);
 
 export const timeSchema = z.object({
   hour: nonEmptyString(z.coerce.number().gte(0, "non zero").max(24)),

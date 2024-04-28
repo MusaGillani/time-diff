@@ -50,11 +50,11 @@ export function Stack() {
                 <Time type={type} ref={ref} />
               </Card>
               {type === Steps.BACK && (
+                // FIXME: this keeps rendering in other steps after its visible
                 <EnterShortcut
                   text={"to submit entries"}
                   shortCut={() => {
-                    // FIXME: this ref is null
-                    ref.current!();
+                    ref.current!(true);
                   }}
                 />
               )}

@@ -15,12 +15,11 @@ import { toast } from "sonner";
 
 export interface TimeProps {
   type: Steps;
-  ref: MutableRefObject<SubmitRef | null>;
 }
 
 export type SubmitRef = (leaving?: boolean) => void;
 
-export const Time = ({ type, ref }: TimeProps) => {
+export const Time = forwardRef<SubmitRef | null, TimeProps>(({ type }, ref) => {
   const [timeVal, setTime] = useState<TimeSchema>({
     hour: "",
     minute: "",
@@ -32,22 +31,27 @@ export const Time = ({ type, ref }: TimeProps) => {
     return (leaving) => submit(timeVal, leaving);
   });
 
+  const label = Steps[type].at(0) + Steps[type].substring(1).toLowerCase();
   const submit = (data: TimeSchema, leaving = false) => {
     const result = timeSchema.safeParse(data);
     if (!result.success) {
-      Object.entries(result.error.formErrors.fieldErrors).forEach(
-        ([field, error]) => {
-          toast.error(`${field}: ${error}`, {
-            position: "bottom-right",
-          });
-        },
+      const errors = Object.entries(result.error.formErrors.fieldErrors).map(
+        ([field, error]) => `${field}: ${error}`,
       );
+      toast.error(label, {
+        position: "bottom-right",
+        description: (
+          <div>
+            {errors.map((error, index) => (
+              <p key={index}>{error}</p>
+            ))}
+          </div>
+        ),
+      });
       return;
     }
     save({ time: data, step: type, leaving });
   };
-
-  const label = Steps[type].at(0) + Steps[type].substring(1).toLowerCase();
 
   return (
     <div className="flex h-full flex-col justify-between gap-y-3 rounded-lg border-2 border-slate-300 p-5">
@@ -73,7 +77,7 @@ export const Time = ({ type, ref }: TimeProps) => {
       </Button>
     </div>
   );
-};
+});
 
 Time.displayName = "Time";
 export default Time;
