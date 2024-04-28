@@ -1,17 +1,13 @@
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import dynamic from "next/dynamic";
-import {
-  MutableRefObject,
-  forwardRef,
-  useImperativeHandle,
-  useState,
-} from "react";
+import { forwardRef, useImperativeHandle, useRef, useState } from "react";
 import { TimeSchema, timeSchema } from "@/lib/form";
 import { Button } from "./ui/button";
 import { useStateStore } from "@/state/provider";
 import { Steps } from "@/state/store";
 import { toast } from "sonner";
+import { useEnter } from "@/hooks/useEnter";
 
 export interface TimeProps {
   type: Steps;
@@ -25,12 +21,14 @@ export const Time = forwardRef<SubmitRef | null, TimeProps>(({ type }, ref) => {
     minute: "",
   });
 
+  const buttonRef = useRef<HTMLButtonElement | null>(null);
   const save = useStateStore(({ save }) => save);
 
   useImperativeHandle(ref, () => {
     return (leaving) => submit(timeVal, leaving);
   });
 
+  useEnter(() => buttonRef.current?.click());
   const label = Steps[type].at(0) + Steps[type].substring(1).toLowerCase();
   const submit = (data: TimeSchema, leaving = false) => {
     const result = timeSchema.safeParse(data);
@@ -72,7 +70,7 @@ export const Time = forwardRef<SubmitRef | null, TimeProps>(({ type }, ref) => {
           setTime((prev) => ({ ...prev, minute: e.target.value }));
         }}
       />
-      <Button type="button" onClick={() => submit(timeVal)}>
+      <Button type="button" onClick={() => submit(timeVal)} ref={buttonRef}>
         Next
       </Button>
     </div>
