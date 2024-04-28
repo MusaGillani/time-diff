@@ -15,8 +15,9 @@
     "lint": "next lint",
     "add-comp": "bunx shadcn-ui@latest add",
     "cm": "cz",
-    "prepare": "husky && husky install",
-    "format": "bunx prettier . --write"
+    "prepare": "husky",
+    "format": "bunx prettier . --write",
+    "typecheck": "bunx tsc"
   },
   "dependencies": {
     "@formkit/tempo": "^0.1.1",

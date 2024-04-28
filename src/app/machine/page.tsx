@@ -1,6 +1,6 @@
 import { Steps } from "@/state-machine/machine";
 import { MachineProvider } from "@/state-machine/provider";
-import { Stepper } from "@/components/Stepper";
+import { Stepper } from "@/state-machine/steps";
 import { defaultContext } from "@/state-machine/context";
 
 export default function Page() {
