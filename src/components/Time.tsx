@@ -6,6 +6,7 @@ import { TimeSchema, timeSchema } from "@/lib/form";
 import { Button } from "./ui/button";
 import { useStateStore } from "@/state/provider";
 import { Steps } from "@/state/store";
+//FIXME this is now a local pkg, figure out a way to fix build error in vercel....
 import { toast } from "sonner";
 import { useEnter } from "@/hooks/useEnter";
 
@@ -21,14 +22,14 @@ export const Time = forwardRef<SubmitRef | null, TimeProps>(({ type }, ref) => {
     minute: "",
   });
 
-  const buttonRef = useRef<HTMLButtonElement | null>(null);
   const save = useStateStore(({ save }) => save);
 
   useImperativeHandle(ref, () => {
     return (leaving) => submit(timeVal, leaving);
   });
 
-  useEnter(() => buttonRef.current?.click());
+  // useEnter(() => submit(timeVal));
+
   const label = Steps[type].at(0) + Steps[type].substring(1).toLowerCase();
   const submit = (data: TimeSchema, leaving = false) => {
     const result = timeSchema.safeParse(data);
@@ -54,23 +55,26 @@ export const Time = forwardRef<SubmitRef | null, TimeProps>(({ type }, ref) => {
   return (
     <div className="flex h-full flex-col justify-between gap-y-3 rounded-lg border-2 border-slate-300 p-5">
       <Label className="text-center text-2xl">{label}</Label>
-      <Input
-        placeholder="hour"
-        value={timeVal.hour}
-        type="number"
-        onChange={(e) => {
-          setTime((prev) => ({ ...prev, hour: e.target.value }));
-        }}
-      />
-      <Input
-        placeholder="minutes"
-        value={timeVal.minute}
-        type="number"
-        onChange={(e) => {
-          setTime((prev) => ({ ...prev, minute: e.target.value }));
-        }}
-      />
-      <Button type="button" onClick={() => submit(timeVal)} ref={buttonRef}>
+
+      <div className="flex gap-2">
+        <Input
+          placeholder="hour"
+          value={timeVal.hour}
+          type="number"
+          onChange={(e) => {
+            setTime((prev) => ({ ...prev, hour: e.target.value }));
+          }}
+        />
+        <Input
+          placeholder="minutes"
+          value={timeVal.minute}
+          type="number"
+          onChange={(e) => {
+            setTime((prev) => ({ ...prev, minute: e.target.value }));
+          }}
+        />
+      </div>
+      <Button type="button" onClick={() => submit(timeVal)}>
         Next
       </Button>
     </div>
