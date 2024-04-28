@@ -28,7 +28,7 @@ export const Time = forwardRef<SubmitRef | null, TimeProps>(({ type }, ref) => {
     return (leaving) => submit(timeVal, leaving);
   });
 
-  // useEnter(() => submit(timeVal));
+  useEnter(() => submit(timeVal));
 
   const label = Steps[type].at(0) + Steps[type].substring(1).toLowerCase();
   const submit = (data: TimeSchema, leaving = false) => {

@@ -19,27 +19,18 @@ export function Stack() {
       className="relative m-auto my-5 h-fit max-h-114 sm:w-11/12 md:w-3/5 lg:w-2/5"
       id={STACK_ID}
     >
-      <Card
-        id={Steps.HERE}
-        index={0}
-        totalCards={shifts.length + 1}
-        key={Steps.HERE}
-      >
-        <Time type={Steps.HERE} ref={ref} />
-      </Card>
-      {shifts.at(-1)?.step === Steps.LEAVING && (
+      {shifts.length === 0 && (
         <Card
-          id={"result"}
-          index={shifts.length}
+          id={Steps.HERE}
+          index={0}
           totalCards={shifts.length + 1}
-          key={"result"}
+          key={Steps.HERE}
         >
-          <Result />
+          <Time type={Steps.HERE} ref={ref} />
         </Card>
       )}
       {shifts.map(({ step, leaving }, index) => {
         const type = getStepType(step, leaving);
-        if (type === Steps.HERE) return;
         return (
           <>
             <Card
@@ -48,10 +39,16 @@ export function Stack() {
               totalCards={shifts.length + 1}
               key={Steps[type]}
             >
-              <Time type={type} ref={ref} />
+              {/* index === shifts.length - 1 >>> only render time inputs for last element */}
+              {/* rendering other empty cards */}
+              {index === shifts.length - 1 &&
+                (step === Steps.LEAVING ? (
+                  <Result />
+                ) : (
+                  <Time type={type} ref={ref} />
+                ))}
             </Card>
-            {type === Steps.BACK && (
-              // FIXME: this keeps rendering in other steps after its visible
+            {type === Steps.BACK && index === shifts.length - 1 && (
               <EnterShortcut
                 text={"to submit entries"}
                 shortCut={() => {
