@@ -61,3 +61,16 @@ export const defaultBreakObj = {
     minute: 0,
   },
 };
+
+export const isCorrect24HourFormat = (input: string) => {
+  // regex to check time in HH:MM in 24 hour format > HH is 00 - 23 , MM is 00 - 59
+  const timeRegexHHMM = /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
+
+  return timeRegexHHMM.test(input);
+};
+export const isCorrect12HourFormat = (input: string) => {
+  // regex to check time in AM/PM format > 12:20 am, 1:20 Pm etc, am pm is case insensitive
+  const timeRegexAMPM = /^(0?[1-9]|1[0-2]):[0-5][0-9] (am|pm)$/i;
+
+  return timeRegexAMPM.test(input);
+};
